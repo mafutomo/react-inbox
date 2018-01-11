@@ -5,7 +5,7 @@ const MessagesList = ({messages, toggleRead, toggleSelected, toggleStarred}) => 
 
   return (
     <div>
-    {messages.map(message => (<Message key= {messages.id}
+    {messages.map(message => (<Message key= {message.id}
       message={message}
       toggleRead = {toggleRead}
       toggleSelected = {toggleSelected}
@@ -13,6 +13,7 @@ const MessagesList = ({messages, toggleRead, toggleSelected, toggleStarred}) => 
       />))}
     </div>
   )
+
 }
 
 export default MessagesList;

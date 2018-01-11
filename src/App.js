@@ -12,7 +12,7 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      messages: this.props.messages
+      messages: props.messages
 
     }
 
@@ -35,7 +35,7 @@ class App extends Component {
     let readMessages = this.state.messages.map( msg => {
       if(msg.selected === true) {
         msg.read = true;
-      } 
+      }
       return msg;
     })
     this.setState({messages:readMessages})
@@ -121,6 +121,11 @@ class App extends Component {
   deleteSelected = () => {
     let result = this.state.messages.filter( msg => msg.selected !== true)
     this.setState({messages:result})
+  }
+
+  //Count number of unread
+  countUnread = () => {
+    
   }
 
   render() {

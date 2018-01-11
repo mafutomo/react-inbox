@@ -3,12 +3,14 @@ import React from 'react'
 //functional component below:
 const Toolbar = (props) => {
 
+  const selectAllIcon = props.messages.filter(msg => msg.selected === true).length === 8 ? 'fa-check-square-o' : props.messages.filter(msg => msg.selected === true).length === 0 ?'fa-square-o' : 'fa-minus-square-o';
+
   return (
 
     <div className="row toolbar">
       <div className="col-md-12">
         <p className="pull-right">
-          <span className="badge badge">2</span>
+          <span className="badge badge">{props.messages.filter(message => message.read === false).length}</span>
           unread messages
         </p>
 
@@ -17,7 +19,7 @@ const Toolbar = (props) => {
         </a>
 
         <button className="btn btn-default" onClick={()=>{props.selectAll()}}>
-          <i className="fa fa-minus-square-o" ></i>
+          <i className={`fa ${selectAllIcon }`} ></i>
         </button>
 
         <button className="btn btn-default" onClick={()=>{props.markAsRead()}}>Mark As Read</button>

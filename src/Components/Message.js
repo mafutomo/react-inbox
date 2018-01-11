@@ -20,7 +20,7 @@ const Message = ({message, toggleRead, toggleSelected, toggleStarred}) => {
         </div>
       </div>
       <div className="col-xs-11">
-        {message.labels.map(ele => <span class="label label-primary">{ele}</span> )}
+        {message.labels.map((ele, i) => <span key={i} className="label label-primary">{ele}</span> )}
         <a>
           {message.subject}
         </a>
