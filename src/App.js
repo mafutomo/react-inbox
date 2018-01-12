@@ -11,13 +11,32 @@ import Navbar from './Components/Navbar';
 class App extends Component {
   constructor(props){
     super(props)
-    this.state = {
-      messages: props.messages
-
-    }
-
+      this.state = {
+        messages: []
+      }
   }
 
+
+   async componentDidMount() {
+     const response = await fetch('http://localhost:8082/api/messages')
+     const json = await response.json()
+     console.log("json response = ",json._embedded.messages);
+     this.setState({messages: json._embedded.messages})
+    }
+
+  //   async createItem(item) {
+  //   const response = await fetch('http://localhost:8082/api/messages', {
+  //   method: 'POST',
+  //   body: JSON.stringify(item),
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Accept': 'application/json',
+  //     }
+  //   })
+  //   const person = await response.json()
+  //   this.setState({people: [...this.state.people, person]})
+  // }
+  //
 
   //create a method for the story
   toggleRead = (message) => {
@@ -123,10 +142,6 @@ class App extends Component {
     this.setState({messages:result})
   }
 
-  //Count number of unread
-  countUnread = () => {
-    
-  }
 
   render() {
     return (
