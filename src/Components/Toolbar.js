@@ -1,9 +1,10 @@
 import React from 'react'
 
 //functional component below:
-const Toolbar = ({messages, message, selectAll, markAsRead, markAsUnread, applyLabel, deleteLabel, deleteSelected, updateItem}) => {
+const Toolbar = ({messages, message, selectAll, markAsRead, markAsUnread, applyLabel, deleteLabel, deleteSelected, updateItem, toggleFormView}) => {
 
   const selectAllIcon = messages.filter(msg => msg.selected === true).length === 8 ? 'fa-check-square-o' : messages.filter(msg => msg.selected === true).length === 0 ?'fa-square-o' : 'fa-minus-square-o';
+
 
   return (
 
@@ -14,7 +15,7 @@ const Toolbar = ({messages, message, selectAll, markAsRead, markAsUnread, applyL
           unread messages
         </p>
 
-        <a className="btn btn-danger" >
+        <a className="btn btn-danger" onClick={()=>{toggleFormView()}}>
           <i className="fa fa-plus"></i>
         </a>
 

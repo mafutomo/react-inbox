@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
-// importing react the libary and the actual components
 import './App.css';
-//importing all of the components directly linked to App.js
 import MessagesList from './Components/MessageList';
 import Toolbar from './Components/Toolbar';
 import Navbar from './Components/Navbar';
+import Form from './Components/Form';
 
 
 class App extends Component {
   constructor(props){
     super(props)
       this.state = {
-        messages: []
+        messages: [],
+        formStatus: false,
+        subject:"",
+        body: ""
       }
   }
 
    async componentDidMount() {
      const response = await fetch('http://localhost:8082/api/messages')
      const json = await response.json()
-     console.log("json response = ",json._embedded.messages);
      this.setState({messages: json._embedded.messages})
     }
 
@@ -34,6 +34,24 @@ class App extends Component {
           }
         })
       }
+
+  //to show form
+  toggleFormView = (formStatus) => {
+    let newFormState = this.state.formStatus
+    newFormState = !newFormState
+    this.setState({formStatus:newFormState})
+  }
+
+  captureSubject = (event) => {
+    let newSubject = event.target.value
+    this.setState({subject:newSubject})
+  }
+
+  captureBody = (event) => {
+    let newBody = event.target.value
+    this.setState({body:newBody})
+  }
+
 
   //create a method for the story
   toggleRead = (message) => {
@@ -114,10 +132,8 @@ class App extends Component {
       this.setState({messages:newMessages})
   }
 
-
   deleteLabel = (value) => {
     let newMessages = this.state.messages.slice(0);
-
     newMessages.map(msg => {
       if(msg.selected === true) {
         if(msg.labels.indexOf(value) !== -1) {
@@ -150,6 +166,16 @@ class App extends Component {
             deleteSelected = {this.deleteSelected}
             applyLabel = {this.applyLabel}
             deleteLabel = {this.deleteLabel}
+            updateItem = {this.updateItem}
+            toggleFormView = {this.toggleFormView}/>
+
+            <Form
+            messages = {this.state.messages}
+            formStatus = {this.state.formStatus}
+            subject = {this.state.subject}
+            body = {this.state.body}
+            captureSubject = {this.captureSubject}
+            captureBody = {this.captureBody}
             updateItem = {this.updateItem}/>
 
             <MessagesList

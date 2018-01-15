@@ -24,14 +24,12 @@ const Message = ({message, toggleRead, toggleSelected, toggleStarred, updateItem
           </div>
           <div className="col-xs-2">
             <i className={`star ${starredClass}`} onClick={(event)=>{
-              
               event.stopPropagation()
               const item = {
                   "messageIds": [message.id],
                   "command": "star",
                   "star": !message.starred
                 }
-
               updateItem(item, "PATCH")
               toggleStarred(message)}}></i>
           </div>
