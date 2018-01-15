@@ -1,7 +1,7 @@
 import React from 'react';
 import Message from './Message';
 
-const MessagesList = ({messages, toggleRead, toggleSelected, toggleStarred}) => { //desctructoring the props, to allow each of the messages components to render (instead of putting "props")
+const MessagesList = ({messages, toggleRead, toggleSelected, toggleStarred, updateItem}) => { //desctructoring the props, to allow each of the messages components to render (instead of putting "props")
 
   return (
     <div>
@@ -10,6 +10,7 @@ const MessagesList = ({messages, toggleRead, toggleSelected, toggleStarred}) => 
       toggleRead = {toggleRead}
       toggleSelected = {toggleSelected}
       toggleStarred = {toggleStarred}
+      updateItem = {updateItem}
       />))}
     </div>
   )

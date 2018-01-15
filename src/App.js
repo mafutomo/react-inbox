@@ -16,7 +16,6 @@ class App extends Component {
       }
   }
 
-
    async componentDidMount() {
      const response = await fetch('http://localhost:8082/api/messages')
      const json = await response.json()
@@ -24,19 +23,17 @@ class App extends Component {
      this.setState({messages: json._embedded.messages})
     }
 
-  //   async createItem(item) {
-  //   const response = await fetch('http://localhost:8082/api/messages', {
-  //   method: 'POST',
-  //   body: JSON.stringify(item),
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Accept': 'application/json',
-  //     }
-  //   })
-  //   const person = await response.json()
-  //   this.setState({people: [...this.state.people, person]})
-  // }
-  //
+//for persisting read, unread, stars
+    async updateItem(item, method) {
+     await fetch('http://localhost:8082/api/messages', {
+       method: method,
+       body: JSON.stringify(item),
+       headers: {
+         'Content-Type': 'application/json',
+         'Accept': 'application/json',
+          }
+        })
+      }
 
   //create a method for the story
   toggleRead = (message) => {
@@ -46,10 +43,6 @@ class App extends Component {
     this.setState({messages:newMessages}) //setState is changing the state because the constructor is incapsulated. When you change state then you'll need this to change the state of any program
   }
 
-  // When a user selects messages
-  // And presses "Mark As Read"
-  // Then each selected message should be marked as read
-  // And should no longer be bold
   markAsRead = () =>{
     let readMessages = this.state.messages.map( msg => {
       if(msg.selected === true) {
@@ -156,7 +149,8 @@ class App extends Component {
             markAsUnread = {this.markAsUnread}
             deleteSelected = {this.deleteSelected}
             applyLabel = {this.applyLabel}
-            deleteLabel = {this.deleteLabel}/>
+            deleteLabel = {this.deleteLabel}
+            updateItem = {this.updateItem}/>
 
             <MessagesList
             messages={this.state.messages}
@@ -164,7 +158,8 @@ class App extends Component {
             toggleSelected = {this.toggleSelected}
             toggleStarred = {this.toggleStarred}
             selectAll = {this.selectAll}
-            deleteLabel = {this.deleteLabel}/>
+            deleteLabel = {this.deleteLabel}
+            updateItem = {this.updateItem}/>
             </div>
 
       </div>

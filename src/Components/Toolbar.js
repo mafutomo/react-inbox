@@ -1,7 +1,7 @@
 import React from 'react'
 
 //functional component below:
-const Toolbar = ({messages, selectAll, markAsRead, markAsUnread, applyLabel, deleteLabel, deleteSelected}) => {
+const Toolbar = ({messages, message, selectAll, markAsRead, markAsUnread, applyLabel, deleteLabel, deleteSelected, updateItem}) => {
 
   const selectAllIcon = messages.filter(msg => msg.selected === true).length === 8 ? 'fa-check-square-o' : messages.filter(msg => msg.selected === true).length === 0 ?'fa-square-o' : 'fa-minus-square-o';
 
@@ -26,21 +26,59 @@ const Toolbar = ({messages, selectAll, markAsRead, markAsUnread, applyLabel, del
 
         <button className="btn btn-default" onClick={()=>{markAsUnread()}}>Mark As Unread</button>
 
-        <select className="form-control label-select" onChange={(event)=>{applyLabel(event.target.value)}}>
+        <select className="form-control label-select" onChange={(event)=>{
+          event.stopPropagation()
+          const item = {
+            "messageIds": [],
+            "command": "addLabel",
+            "label": event.target.value
+          }
+          messages.map(ele => {
+            if(ele.selected) {
+              item.messageIds.push(ele.id)
+            }
+          })
+          updateItem(item, 'PATCH')
+          applyLabel(event.target.value)}}>
           <option selected="true" disabled="disabled">Apply label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
           <option value="gschool">gschool</option>
         </select>
 
-        <select className="form-control label-select" onChange={(event)=>{deleteLabel(event.target.value)}}>
+        <select className="form-control label-select" onChange={(event)=>{
+          event.stopPropagation()
+          const item = {
+            "messageIds": [],
+            "command": "removeLabel",
+            "label": event.target.value
+          }
+          messages.map(ele => {
+            if(ele.selected) {
+              item.messageIds.push(ele.id)
+            }
+          })
+          updateItem(item, "PATCH")
+          deleteLabel(event.target.value)}}>
           <option selected="true" disabled="disabled">Remove label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
           <option value="gschool">gschool</option>
         </select>
 
-        <button className="btn btn-default" onClick={()=>{deleteSelected()}}>
+        <button className="btn btn-default" onClick={(event)=>{
+          event.stopPropagation()
+          const item ={
+            "messageIds": [],
+            "command": "delete"
+          }
+          messages.map(ele => {
+            if(ele.selected) {
+              item.messageIds.push(ele.id)
+            }
+          })
+          updateItem(item, "PATCH")
+          deleteSelected()}}>
           <i className="fa fa-trash-o"></i>
         </button>
       </div>
