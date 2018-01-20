@@ -4,7 +4,11 @@ import MessagesList from './Components/MessageList';
 import Toolbar from './Components/Toolbar';
 import Navbar from './Components/Navbar';
 import Form from './Components/Form';
-
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
 
 class App extends Component {
   constructor(props){
@@ -13,27 +17,37 @@ class App extends Component {
         messages: [],
         formStatus: false,
         subject:"",
-        body: ""
+        body: "",
+        bod:"",
+        bodObj: ""
       }
   }
 
-   async componentDidMount() {
+//anytime you need to set state or use this.state, like below, you need to have it in an arrow function if you want to avoid using .bind(this) in your render.
+  componentDidMount = async () => {
      const response = await fetch('http://localhost:8082/api/messages')
      const json = await response.json()
      this.setState({messages: json._embedded.messages})
+     console.log(this.state.messages);
+    }
+
+  getBody = async (id) =>  {
+        const response = await fetch(`http://localhost:8082/api/messages/${id}`)
+        const json = await response.json()
+        this.setState({bodObj:json.body})
     }
 
 //for persisting read, unread, stars
     async updateItem(item, method) {
-     await fetch('http://localhost:8082/api/messages', {
-       method: method,
-       body: JSON.stringify(item),
-       headers: {
-         'Content-Type': 'application/json',
-         'Accept': 'application/json',
-          }
-        })
-      }
+      await fetch(`http://localhost:8082/api/messages`, {
+        method: method,
+        body: JSON.stringify(item),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+           }
+         })
+       }
 
   //to show form
   toggleFormView = (formStatus) => {
@@ -52,7 +66,6 @@ class App extends Component {
     this.setState({body:newBody})
   }
 
-
   //create a method for the story
   toggleRead = (message) => {
     const index = this.state.messages.indexOf(message);
@@ -62,6 +75,7 @@ class App extends Component {
   }
 
   markAsRead = () =>{
+
     let readMessages = this.state.messages.map( msg => {
       if(msg.selected === true) {
         msg.read = true;
@@ -91,7 +105,6 @@ class App extends Component {
   }
 
   // Select all messages
-
   selectAll = () => {
     let allMessages = this.state.messages;
 
@@ -153,42 +166,62 @@ class App extends Component {
 
 
   render() {
-    return (
+
+  return (
+    <Router>
       <div className="App">
-          <Navbar />
-
           <div className='container'>
-            <Toolbar
-            messages = {this.state.messages}
-            selectAll = {this.selectAll}
-            markAsRead = {this.markAsRead}
-            markAsUnread = {this.markAsUnread}
-            deleteSelected = {this.deleteSelected}
-            applyLabel = {this.applyLabel}
-            deleteLabel = {this.deleteLabel}
-            updateItem = {this.updateItem}
-            toggleFormView = {this.toggleFormView}/>
 
-            <Form
-            messages = {this.state.messages}
-            formStatus = {this.state.formStatus}
-            subject = {this.state.subject}
-            body = {this.state.body}
-            captureSubject = {this.captureSubject}
-            captureBody = {this.captureBody}
-            updateItem = {this.updateItem}/>
+          <Route path='/' render={() => (
+            <div>
+              <Navbar />
+              <Toolbar
+                messages = {this.state.messages}
+                formStatus = {this.state.formStatus}
+                selectAll = {this.selectAll}
+                markAsRead = {this.markAsRead}
+                markAsUnread = {this.markAsUnread}
+                deleteSelected = {this.deleteSelected}
+                applyLabel = {this.applyLabel}
+                deleteLabel = {this.deleteLabel}
+                updateItem = {this.updateItem}
+                toggleFormView = {this.toggleFormView}/>
 
-            <MessagesList
-            messages={this.state.messages}
-            toggleRead = {this.toggleRead}
-            toggleSelected = {this.toggleSelected}
-            toggleStarred = {this.toggleStarred}
-            selectAll = {this.selectAll}
-            deleteLabel = {this.deleteLabel}
-            updateItem = {this.updateItem}/>
+                <Route path='/compose' render={() => (
+                  <div>
+                    <Form
+                      messages = {this.state.messages}
+                      formStatus = {this.state.formStatus}
+                      subject = {this.state.subject}
+                      body = {this.state.body}
+                      captureSubject = {this.captureSubject}
+                      captureBody = {this.captureBody}
+                      updateItem = {this.updateItem}
+                      componentDidMount = {this.componentDidMount}/>
+                    </div>
+                  )}/>
+
+                    <div>
+                    <MessagesList
+                      messages={this.state.messages}
+                      toggleRead = {this.toggleRead}
+                      toggleSelected = {this.toggleSelected}
+                      toggleStarred = {this.toggleStarred}
+                      selectAll = {this.selectAll}
+                      deleteLabel = {this.deleteLabel}
+                      updateItem = {this.updateItem}
+                      getBody = {this.getBody}
+                      bod = {this.state.bod}
+                      bodObj = {this.state.bodObj}
+                      />
+                    </div>
+
+                </div>
+              )}/>
+
             </div>
-
-      </div>
+        </div>
+    </Router>
     );
   }
 }

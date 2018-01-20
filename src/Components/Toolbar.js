@@ -1,10 +1,12 @@
 import React from 'react'
+import {
+  Link
+} from 'react-router-dom'
 
 //functional component below:
-const Toolbar = ({messages, message, selectAll, markAsRead, markAsUnread, applyLabel, deleteLabel, deleteSelected, updateItem, toggleFormView}) => {
+const Toolbar = ({messages, message, selectAll, markAsRead, markAsUnread, applyLabel, deleteLabel, deleteSelected, updateItem, toggleFormView, formStatus}) => {
 
   const selectAllIcon = messages.filter(msg => msg.selected === true).length === 8 ? 'fa-check-square-o' : messages.filter(msg => msg.selected === true).length === 0 ?'fa-square-o' : 'fa-minus-square-o';
-
 
   return (
 
@@ -15,9 +17,11 @@ const Toolbar = ({messages, message, selectAll, markAsRead, markAsUnread, applyL
           unread messages
         </p>
 
+        <Link to ={formStatus ? '/' : '/compose'}>
         <a className="btn btn-danger" onClick={()=>{toggleFormView()}}>
           <i className="fa fa-plus"></i>
         </a>
+        </Link>
 
         <button className="btn btn-default" onClick={()=>{selectAll()}}>
           <i className={`fa ${selectAllIcon }`} ></i>
@@ -39,6 +43,7 @@ const Toolbar = ({messages, message, selectAll, markAsRead, markAsUnread, applyL
               item.messageIds.push(ele.id)
             }
           })
+
           updateItem(item, 'PATCH')
           applyLabel(event.target.value)}}>
           <option selected="true" disabled="disabled">Apply label</option>

@@ -1,12 +1,15 @@
 import React from 'react'
+import {
+  Link
+} from 'react-router-dom'
 
-const Form = ({messages, formStatus, captureSubject, captureBody, subject, body, updateItem}) => {
+const Form = ({messages, formStatus, captureSubject, captureBody, subject, body, updateItem, componentDidMount}) => {
 
-  if(!formStatus) {
-    return (
-      <div></div>
-    )
-  } else {
+  let updateAndShow = async (item, method) => {
+    await updateItem(item,method)
+    await componentDidMount()
+  }
+
     return (
           <form className="form-horizontal well">
         <div className="form-group">
@@ -28,19 +31,20 @@ const Form = ({messages, formStatus, captureSubject, captureBody, subject, body,
         </div>
         <div className="form-group">
           <div className="col-sm-8 col-sm-offset-2">
+          <Link to ='/'>
             <input type="submit" value="Send" className="btn btn-primary" onClick={(event)=>{
-              event.stopPropagation()
               const item = {
                 "subject":subject,
                 "body":body
               }
-              updateItem(item,"POST")
+              updateAndShow(item, "POST")
             }}/>
+            </Link>
           </div>
         </div>
       </form>
     )
-  }
+
 
 }
 

@@ -15,6 +15,7 @@ import App from './App';
 ////the 'const App' is exactly the same as the import above
 //const App = require('./App')
 
+import PropTypes from 'prop-types';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(<App />, document.getElementById('root'));
